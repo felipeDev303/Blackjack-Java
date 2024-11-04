@@ -25,13 +25,35 @@ public class BlackJack {
             this.type = type;
         }
 
+        // Sobrecarga del método toString para que no imprima los espacios en memoria
         public String toString(){
             return value + "-" + type;
         }
+
+        public int getValue(){
+            if ("AJQK".contains(value)){
+                if (value == "A"){
+                    return 11; // As
+                }
+                return 10; // JQK
+            }
+            return Integer.parseInt(value); // 2-10
+        }
+
+        public boolean isAce(){
+            return value == "A";
+        }
     }
 
-    // Mano (deck)
+    // Mazo (deck)
     ArrayList<Card> deck;
+    Random random = new Random(); // shuffleDeck
+
+    // dealer
+    Card hiddenCard; // Carta oculta del crupier
+    ArrayList<Card> dealerHand; // mano del crupier
+    int dealerSum; // suma de la mano del crupier
+    int dealerAceCount;
 
     // Constructor de la clase BlackJack
     BlackJack(){
@@ -39,23 +61,62 @@ public class BlackJack {
         starGame();
     }
     public void starGame(){
-        // deck
+        // llamamos a la construcción del mazo (deck)
         buildDeck();
+        // Llamamos a la función barajar
+        shuffleDeck();
+
+        // dealer
+        dealerHand = new ArrayList<Card>();
+        dealerSum =0;
+        dealerAceCount=0;
+
+        hiddenCard = deck.remove(deck.size()-1);
+        dealerSum += hiddenCard.getValue();
+        dealerAceCount += hiddenCard.isAce() ? 1 : 0;
+
+        Card card = deck.remove(deck.size()-1);
+        dealerSum += card.getValue();
+        dealerAceCount += card.isAce() ? 1 : 0;
+        dealerHand.add(card);
+
+        System.out.println("DEALER:");
+        System.out.println(hiddenCard);
+        System.out.println(dealerHand);
+        System.out.println(dealerSum);
+        System.out.println(dealerAceCount);
 
     }
 
+    // Método que construye el mazo
     public void buildDeck(){
         deck = new ArrayList<Card>();
         String[] types = {"C","D","H","S"};
         String[] values = {"A","2","3","4","5","6","7","8","9","10","J","Q","K"};
 
+        // Ciclo que recorre los arrays para construir el mazo
         for (int i = 0; i < types.length; i++){
             for (int j = 0; j <values.length; j++){
+                // Objeto tarjeta
                 Card card = new Card(values[j],types[i]);
+                // Al mazo le agrego la tarjeta
                 deck.add(card);
             }
         }
         System.out.println("Build Deck:");
+        System.out.println(deck);
+    }
+
+    public void shuffleDeck(){
+        for(int i=0;i<deck.size();i++){
+            int j = random.nextInt(deck.size());
+            Card currCard = deck.get(i);
+            Card randomCard = deck.get(j);
+            deck.set(i, randomCard);
+            deck.set(j, currCard);
+        }
+
+        System.out.println("AFTER SHUFFLE");
         System.out.println(deck);
     }
 }
