@@ -60,10 +60,28 @@ public class BlackJack {
     int playerSum;
     int playerAceCount;
 
+    // Windows
+    int boardWidth =600;
+    int boardHeight=boardWidth;
+
+    JFrame frame = new JFrame("Black Jack");
+
     // Constructor de la clase BlackJack
     BlackJack(){
         // Función inicio del juego
         starGame();
+
+        // Hacer visible la ventana
+        frame.setVisible(true);
+        // Tamaño ventana
+        frame.setSize(boardWidth, boardHeight);
+        // Locación central
+        frame.setLocationRelativeTo(null);
+        // No redimensionable
+        frame.setResizable(false);
+        // Cerrar al salir
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
     }
     public void starGame(){
         // llamamos a la construcción del mazo (deck)
